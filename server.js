@@ -44,6 +44,18 @@ app.get("/", (req, res) => {
   res.send(result);
 });
 
+app.get("/getDeploymentName", (req, res) => {
+  res.send(process.env.DEPLOYMENT_NAME);
+});
+
+app.get("/getProjectId", (req, res) => {
+  res.send(process.env.PROJECT_ID);
+});
+
+app.get("/getDeploymentName", (req, res) => {
+  res.send(process.env.DEPLOYMENT_NAME);
+});
+
 app.get("/app2", (req, res) => {
   res.send("hello App2");
 });
