@@ -1,5 +1,5 @@
 const express = require("express");
-const axios = require('axios');
+const axios = require("axios");
 // Constants
 const PORT = 8000;
 
@@ -11,7 +11,7 @@ const urlDB = "mongodb://mongodb-service.default.svc.cluster.local:27017/test";
 const connectionStrings = [
   // "mongodb+srv://huy:Huy123456@cluster0.gxx1g.mongodb.net/dbapp1?retryWrites=true&w=majority",
   // "mongodb+srv://huy:Huy123456@cluster0.gxx1g.mongodb.net/dbapp2?retryWrites=true&w=majority",
-  urlDB
+  urlDB,
 ];
 
 // Promise.all(
@@ -29,7 +29,6 @@ const connectionStrings = [
 //   })
 //   .catch((error) => console.log(error));
 
-
 // mongoose
 //   .connect("mongodb://" + urlDB + "/test", { useNewUrlParser: true })
 //   .then(() => {
@@ -44,54 +43,34 @@ app.get("/", (req, res) => {
   res.send(result);
 });
 
-app.get("/call-dataproxy1", async (req, res) => {
-  const response = await axios.get('http://dataproxy-service.default.svc.cluster.local:30888/dataproxy');
+app.get("/call-dataproxy", async (req, res) => {
+  const response = await axios.get(
+    "http://dataproxy-service.default.svc.cluster.local:5000/dataproxy"
+  );
 
-  res.send(response.data);
-});
-
-app.get("/call-dataproxy2", async (req, res) => {
-  const response = await axios.get('http://dataproxy-service.default.svc.cluster.local:5000/dataproxy');
-
-  res.send(response.data);
-});
-
-app.get("/call-dataproxy3", async (req, res) => {
-  const response = await axios.get('http://10.76.14.51:5000/dataproxy');
-  res.send(response.data);
-});
-
-app.get("/call-dataproxy4", async (req, res) => {
-  const response = await axios.get('http://10.76.14.51:5000/dataproxy');
-  res.send(response.data);
-});
-
-app.get("/call-dataproxy4", async (req, res) => {
-  const response = await axios.get('http://10.76.14.51:30888/dataproxy');
-  res.send(response.data);
-});
-
-app.get("/call-dataproxy4", async (req, res) => {
-  const response = await axios.get('http://10.76.14.51:30888/dataproxy');
   res.send(response.data);
 });
 
 app.get("/bargainer-version", async (req, res) => {
-  const response = await axios.get('https://test.mevry.com/bargainer/versions');
+  const response = await axios.get("https://test.mevry.com/bargainer/versions");
   res.send(response.data);
 });
 
+app.post("/create-document", async (req, res) => {
+  const { body } = req;
 
-app.get("/getDeploymentName", (req, res) => {
-  res.send(process.env.DEPLOYMENT_NAME);
+  const response = await axios.post(
+    "http://dataproxy-service.default.svc.cluster.local:5000/apps/dbapp1/collections/bargainer",
+    body
+  );
+  res.send(response.data);
 });
 
-app.get("/getProjectId", (req, res) => {
-  res.send(process.env.PROJECT_ID);
-});
-
-app.get("/getDeploymentName", (req, res) => {
-  res.send(process.env.DEPLOYMENT_NAME);
+app.get("/get-document", async (req, res) => {
+  const response = await axios.get(
+    "http://dataproxy-service.default.svc.cluster.local:5000/apps/dbapp1/collections/bargainer"
+  );
+  res.send(response.data);
 });
 
 app.get("/app2", (req, res) => {
