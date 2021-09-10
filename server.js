@@ -1,5 +1,5 @@
 const express = require("express");
-
+const axios = require('axios');
 // Constants
 const PORT = 8000;
 
@@ -14,20 +14,20 @@ const connectionStrings = [
   urlDB
 ];
 
-Promise.all(
-  connectionStrings.map((connectionString) =>
-    require("mongodb").MongoClient.connect(connectionString, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-  )
-)
-  .then((clients) => {
-    console.log("connected");
+// Promise.all(
+//   connectionStrings.map((connectionString) =>
+//     require("mongodb").MongoClient.connect(connectionString, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     })
+//   )
+// )
+//   .then((clients) => {
+//     console.log("connected");
 
-    app.connected = true;
-  })
-  .catch((error) => console.log(error));
+//     app.connected = true;
+//   })
+//   .catch((error) => console.log(error));
 
 
 // mongoose
@@ -43,6 +43,44 @@ app.get("/", (req, res) => {
   const result = "mongo connected: " + req.app.connected;
   res.send(result);
 });
+
+app.get("/call-dataproxy1", async (req, res) => {
+  const response = await axios.get('http://dataproxy-service.default.svc.cluster.local:30888/dataproxy');
+
+  res.send(response.data);
+});
+
+app.get("/call-dataproxy2", async (req, res) => {
+  const response = await axios.get('http://dataproxy-service.default.svc.cluster.local:5000/dataproxy');
+
+  res.send(response.data);
+});
+
+app.get("/call-dataproxy3", async (req, res) => {
+  const response = await axios.get('http://10.76.14.51:5000/dataproxy');
+  res.send(response.data);
+});
+
+app.get("/call-dataproxy4", async (req, res) => {
+  const response = await axios.get('http://10.76.14.51:5000/dataproxy');
+  res.send(response.data);
+});
+
+app.get("/call-dataproxy4", async (req, res) => {
+  const response = await axios.get('http://10.76.14.51:30888/dataproxy');
+  res.send(response.data);
+});
+
+app.get("/call-dataproxy4", async (req, res) => {
+  const response = await axios.get('http://10.76.14.51:30888/dataproxy');
+  res.send(response.data);
+});
+
+app.get("/bargainer-version", async (req, res) => {
+  const response = await axios.get('https://test.mevry.com/bargainer/versions');
+  res.send(response.data);
+});
+
 
 app.get("/getDeploymentName", (req, res) => {
   res.send(process.env.DEPLOYMENT_NAME);
